@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+	<link rel="stylesheet" href="/stylesheets/foodleMainStyleSheet.css"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <script src="/js/fadeout.js"></script>
+    <title>Foodle</title>
+</head>
+<body class="black">
+
+
+
+	<div id="fixed">
+	</div>
+
+  <br/>
+  <div class="container">
+    <div id="flasher">
+      <% if(success_msg && success_msg.length > 0){ %>
+        <div class="alert alert-success" rold="alert">
+            <%= success_msg %>
+        </div>
+      <% } else if(error_msg && error_msg.length > 0){ %>
+        <div class="alert alert-danger" rold="alert">
+            <%= error_msg %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <script>
+  $(document).ready(function () {
+
+    window.setTimeout(function() {
+        $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
+            $(this).remove();
+        });
+    }, 2000);
+
+  });
+
+  </script>
+
+	<!--Top bar, contains LOGIN---------------------------------------------------------------------------------------->
+	<div class="top-bar themeRed1">
+		<% if(!currentUser){ %>
+			<a href="/register" onclick="" class="top-bar-content hover-text-themeRed7 text-24 text-white text-unlined">
+        		Create Account
+			</a>
+            <a href="/login" onclick="" class="top-bar-content hover-text-themeRed7 text-24 text-white text-unlined">
+        		Login
+			</a>
+        <% } else { %>
+            <a href="/profile" class="top-bar-content hover-text-themeRed7 text-24 text-white text-unlined">
+        		Signed In As <%= currentUser.firstname %>
+			</a>
+            <a href="/logout" onclick="" class="top-bar-content hover-text-themeRed7 text-24 text-white text-unlined">
+        		Log Out
+			</a>
+        <% } %>
+
+
+
+	</div>
+
+	<!--Side bar, contains Categories that the users can look at---------------------------------------------------------------------------------------->
+	<div id="sideBar" class="left-sidebar themePink1 text-white">
+		<div class="text-48 text-white sidebar-title">
+			FOODLE
+		</div>
+		<div>
+			<a href="/category/restaurants" onclick="" class="hover-themeRed3 hover-text-themeRed5 text-24 text-white sidebar-content text-unlined">
+				Food
+			</a>
+			<a href="/category/bars" onclick="" class="hover-themeRed3 hover-text-themeRed5 text-24 text-white sidebar-content text-unlined">
+				Drink
+			</a>
+			<a href="/category/cafes" onclick="" class="hover-themeRed3 hover-text-themeRed5 text-24 text-white sidebar-content text-unlined">
+				Coffee
+			</a>
+		</div>
+	</div>
+
+	<!--Main body---------------------------------------------------------------------------------------->
+	<div class="main white-transparent-half">
+
+		<!--ranking space for the Food category (can be changed anytime)---------------------------------------------------------------------------------------->
+		<div class="display-window-flat-bottom tabbing themeRed3 shadow-themeGray4">
+			Food
+		</div>
+
+		<div class="display-window-main white shadow-themeGray4">
+  			<div id="thumbnail" class="card-deck">
+
+          <% for(var i = 0; i < 3; i++) { %>
+    				<div class="card img-fluid" style="width:33%">
+    					<img class="card-img-top" src="<%= restaurants[i].picurl1 %>" alt="Card image" style="width:100%;height:400px;object-fit:cover">
+    					<div class="card-img-overlay">
+    						<div class="white-transparent display-window" style="padding:5px">
+    							<h5 class="card-title text-bold">#<%= i+1 %></h4>
+    							<h6 class="card-text text-bold"><%= restaurants[i].name %></p>
+    							<a href="place/<%= restaurants[i]._id %>" class="btn themePink1 hover-themeRed1 text-white">Learn More</a>
+    						</div>
+    					</div>
+    				</div>
+          <% } %>
+			</div>
+		</div>
+
+		<!--ranking space for the Drink category (can be changed anytime)---------------------------------------------------------------------------------------->
+		<div class="display-window-flat-bottom tabbing themeRed3 shadow-themeGray4">
+			Drink
+		</div>
+
+		<div class="display-window-main white shadow-themeGray4">
+
+			<div id="thumbnail" class="card-deck">
+
+        <% for(var i = 0; i < 3; i++) { %>
+  				<div class="card img-fluid" style="width:20%">
+  					<img class="card-img-top" src="<%= bars[i].picurl1 %>" alt="Card image" style="width:100%;height:400px;object-fit:cover">
+  					<div class="card-img-overlay">
+  						<div class="white-transparent display-window" style="padding:5px">
+  							<h5 class="card-title text-bold">#<%= i+1 %></h4>
+  							<h6 class="card-text text-bold"><%= bars[i].name %></p>
+  							<a href="place/<%= bars[i]._id %>" class="btn themePink1 hover-themeRed1 text-white">Learn More</a>
+  						</div>
+  					</div>
+  				</div>
+        <% } %>
+     </div>
+   </div>
+
+
+		<!--ranking space for the Coffee category (can be changed anytime)---------------------------------------------------------------------------------------->
+	  <div class="display-window-flat-bottom tabbing themeRed3 shadow-themeGray4">
+			Coffee
+		</div>
+		<div class="display-window-main white shadow-themeGray4">
+	    <div id="thumbnail" class="card-deck">
+
+        <% for(var i = 0; i < 3; i++) { %>
+				  <div class="card img-fluid" style="width:20%">
+  					<img class="card-img-top" src="<%= cafes[i].picurl1 %>" alt="Card image" style="width:100%;height:400px;object-fit:cover"">
+  					<div class="card-img-overlay">
+  						<div class="white-transparent display-window" style="padding:5px">
+  							<h5 class="card-title text-bold"><%= i+1 %></h4>
+  							<h6 class="card-text text-bold"><%= cafes[i].name %></p>
+  							<a href="place/<%= cafes[i]._id %>" class="btn themePink1 hover-themeRed1 text-white">Learn More</a>
+  						</div>
+  					</div>
+  				</div>
+        <% } %>
+
+			</div>
+	  </div>
+
+
+
+
+
+
+
+
+	<!--Bottom Bar---------------------------------------------------------------------------------------->
+	<div class="bottom-bar-long themeRed5" style="padding:20px">
+
+		<div class="fluid">
+			<div class="row">
+
+				<div class="col-lg-2">
+
+				</div>
+
+				<div class="col-lg-4">
+
+					<div class="text-white display-window themeRed4" style="padding:20px;font-size:20px">
+						Don't see your favorite restaurant on website?</br>
+						Please send us a suggestion, and we will add your favorite restaurant ASAP!</br>
+					</div>
+					</br>
+
+					<form id="suggestionSender" method="POST" action="/category">
+						<div class="text-white"> Your Name </div><input type="text" name="name" style="width:50%"></br>
+						<div class="text-white"> Restaurant Name </div><input type="text" name="restaurant" style="width:50%"></br>
+						<div class="text-white"> Restaurant Address </div><input type="text" name="address" style="width:80%"></br>
+						<div class="text-white"> Extra information </div><textarea type="text" rows="5" name="extra" style="width:80%"></textarea></br>
+						<input type="submit" name="Submit" class="btn themeRed4 hover-themePink1">
+					</form>
+
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+
+
+
+</body>
+
+
+
+
+</html>

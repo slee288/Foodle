@@ -1,0 +1,102 @@
+
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../../stylesheets/foodleMainStyleSheet.css"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Foodle</title>
+</head>
+
+<body class="themePink1">
+
+	<div id="fixed">
+	</div>
+
+	<div class="deadCenter" style="width:20%">
+
+		<form onsubmit="return SendInformation(event)" method="POST" class="display-window themeRed3" action="/reset/password/<%= token %>">
+			<h1 class="text-bold text-themeRed5"style="text-align:center;padding:5px">Reset Password</h1>
+			</br>
+  			<div id="newPasswordAlert" class="text-themePink1 text-bold" style="padding-left:10px;font-size:12px"></div>
+  			<input id="newPassword" oninput="ConfirmPassword();PasswordLength()" class="form-text border-themeRed5" type="password" name="password" placeholder="Password" required>
+  			<div id="confirmPasswordAlert" class="text-themePink1 text-bold" style="padding-left:10px;font-size:12px"></div>
+  			<input id="confirmPassword" oninput="ConfirmPassword();PasswordLength()" class="form-text border-themeRed5" type="password" name="password2" placeholder="Confirm Password" required>
+        <input id="submitBox" class="form-button border-themeRed5 themeRed5 text-white" type="submit" value="Create!">
+		</form>
+	</div>
+
+
+
+</body>
+
+<script>
+
+	function ConfirmPassword(){
+		if(document.getElementById("newPassword").value == document.getElementById("confirmPassword").value){
+			document.getElementById("confirmPassword").style.border = "2px solid green";
+			document.getElementById("confirmPasswordAlert").innerHTML = "";
+			return true;
+		}else{
+			document.getElementById("confirmPassword").style.border  = "2px solid red";
+			document.getElementById("confirmPasswordAlert").innerHTML = "The passwords should match!";
+			return false;
+		}
+	}
+
+	function PasswordLength(){
+		if(document.getElementById("newPassword").value.length >= 6){
+			document.getElementById("newPassword").style.border = "2px solid green";
+			document.getElementById("newPasswordAlert").innerHTML = "";
+			return true;
+		}else{
+			document.getElementById("newPassword").style.border = "2px solid red";
+			document.getElementById("newPasswordAlert").innerHTML = "Minimum password length is 6"
+			return false;
+		}
+	}
+
+	function ConfirmEmail(){
+		var regex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+		if(regex.test(document.getElementById("email").value.toLowerCase())){
+			document.getElementById("newEmailAlert").innerHTML="";
+			return true;
+		}else{
+			document.getElementById("newEmailAlert").innerHTML="Please input a valid email address";
+			return false;
+		}
+	}
+
+
+	function SendInformation(event){
+		if(!ConfirmPassword()){
+			event.preventDefault();
+			alert("Please make sure the passwords match");
+			return false;
+		}
+
+		if(!PasswordLength()){
+			event.preventDefault();
+			alert("Please make sure the password length is more than 6");
+			return false;
+		}
+
+		if(!ConfirmEmail()){
+			event.preventDefault();
+			alert("Plesae make sure your email address is a valid email address");
+			return false;
+		}
+
+	}
+
+
+</script>
+
+
+
+
+
+
+</html>

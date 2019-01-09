@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="../stylesheets/foodleMainStyleSheet.css"/>
+
+
+	<style>
+		.checked {color:#ff6961}
+		.carousel-inner img {
+			width: 100%;
+			height:200px;
+			object-fit:cover;
+		}
+	</style>
+
+
+
+
+	<title>SampleProfilePage</title>
+
+
+</head>
+
+
+
+<body class="themeRed4">
+
+	<div id="fixed">
+	</div>
+
+	<div class="top-bar-restaurant themePink1">
+    <% if(currentUser) { %>
+      <a href="/logout" onclick="" class="top-bar-content hover-text-themeRed7 text-24 text-white text-unlined">
+          Log Out
+      </a>
+    <% } %>
+		<a href="/" onclick="" class="top-bar-home hover-text-themeRed7 text-24 text-white text-unlined">
+			Foodle
+		</a>
+	</div>
+
+	</br>
+
+	<div class="white main-restaurant">
+		<div class="display-window border-themeRed5">
+			<img src="../images/defaultProfile.png" class="rounded-circle mx-auto d-block" width="20%">
+			<p class="logo-superBig text-themeRed5"><%= currentUser.firstname %> <%= currentUser.lastname %></p>
+		</div>
+	</div>
+
+	<div class="themeRed3" style="margin-top:35%">
+		</br>
+		<p class="logo-superBig text-themePink1">
+			<%= currentUser.firstname %>'s List
+		</p>
+		</br>
+	</div>
+
+
+	<!--For each restaurant, this will exist----------->
+  <% favorites.forEach(function(favorite){ %>
+	<div class="profile-restaurant themeGray1">
+
+		<div id="bannerCarousel" class="carousel slide" data-ride="carousel" style="width:300px;float:right;object-fit:cover">
+			<ul class="carousel-indicators">
+				<li data-target="#bannerCarousel" class="active"></li>
+				<li data-target="#bannerCarousel"></li>
+				<li data-target="#bannerCarousel"></li>
+			</ul>
+
+			<div class="carousel-inner">
+				<div class="carousel-item active">
+					<img src="<%= favorite.picurl1 %>" alt="photo1">
+				</div>
+				<div class="carousel-item">
+					<img src="<%= favorite.picurl2 %>" alt="photo2">
+				</div>
+				<div class="carousel-item">
+					<img src="<%= favorite.picurl3 %>" alt="photo3">
+				</div>
+			</div>
+
+
+		</div>
+
+
+		<div class="text-36 text-bold">
+			<%= favorite.name %>
+		</div>
+		<div class="text-24">
+			<%= favorite.location %>
+		</div>
+		<div class="text-16">
+			<%= favorite.description %>
+		</div>
+		</br>
+
+		<a href="place/<%= favorite._id %>" class="tag-button themePink1 hover-themeRed1 text-white">
+			See More
+		</a>
+
+	</div>
+  <% }); %>
+
+
+  <!--Bottom Bar---------------------------------------------------------------------------------------->
+	<div class="bottom-bar-long themeRed5" style="padding:20px">
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+<script>
+
+	$(document).ready(function(){
+		$(window).scroll( function(){
+
+			/* Check the location of each desired element */
+			$('.profile-restaurant').each( function(i){
+				var trigger_point = $(this).offset().top + $(this).outerHeight()/2;
+				var top_of_window = $(window).scrollTop();
+				var bottom_of_window = $(window).scrollTop() + $(window).height();
+
+
+				if( bottom_of_window > trigger_point && trigger_point > top_of_window ){
+
+					$(this).animate({'opacity':'1'},1000);
+
+				}
+
+
+
+
+			});
+
+		});
+    });
+
+
+
+</script>
+
+
+
+
+
+</html>

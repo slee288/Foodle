@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="../stylesheets/foodleMainStyleSheet.css"/>
+
+	<style>
+		.checked {color:#ff6961}
+		.carousel-inner img {
+			width: 100%;
+			height: 500px;
+			object-fit:cover;
+		}
+
+
+
+	</style>
+
+	<title>SampleRestaurantPage</title>
+
+
+
+</head>
+<body class="white">
+
+	<div id="fixed">
+	</div>
+
+
+	<!--Top bar, contains LOGIN---------------------------------------------------------------------------------------->
+
+	<div class="top-bar-restaurant themePink1">
+    <% if(!currentUser){ %>
+		<a href="/login" onclick="" class="top-bar-content hover-text-themeRed7 text-24 text-white text-unlined">
+			Login
+		</a>
+    <% } else { %>
+    <a href="/logout" onclick="" class="top-bar-content hover-text-themeRed7 text-24 text-white text-unlined">
+        Log Out
+    </a>
+    <% } %>
+		<a href="/" onclick="" class="top-bar-home hover-text-themeRed7 text-24 text-white text-unlined">
+			Foodle
+		</a>
+	</div>
+
+
+
+	<div id="bannerCarousel" class="top-banner carousel slide" data-ride="carousel">
+		<ul class="carousel-indicators">
+			<li data-target="#bannerCarousel" data-slide-to="0" class="active"></li>
+			<li data-target="#bannerCarousel" data-slide-to="1"></li>
+			<li data-target="#bannerCarousel" data-slide-to="2"></li>
+		</ul>
+
+		<div class="carousel-inner">
+			<div class="carousel-item active">
+				<img src="<%= foundPlace.picurl1 %>" alt="photo1">
+			</div>
+			<div class="carousel-item">
+				<img src="<%= foundPlace.picurl2 %>" alt="photo2">
+			</div>
+			<div class="carousel-item">
+				<img src="<%= foundPlace.picurl3 %>" alt="photo3">
+			</div>
+		</div>
+
+		<a class="carousel-control-prev" href="#bannerCarousel" data-slide="prev">
+			<span class="carousel-control-prev-icon"></span>
+		</a>
+		<a class="carousel-control-next" href="#bannerCarousel" data-slide="next">
+			<span class="carousel-control-next-icon"></span>
+		</a>
+	</div>
+
+
+	<div class="main-restaurant themeGray1 shadow-themeGray5">
+		<div class="text-36 text-bold">
+			<%= foundPlace.name %>
+		</div>
+
+		<div class="text-24">
+			<%= foundPlace.location %>
+		</div>
+
+		<div>
+			<span id="star1" class="fa fa-star"></span>
+			<span id="star2"  class="fa fa-star"></span>
+			<span id="star3"  class="fa fa-star"></span>
+			<span id="star4"  class="fa fa-star"></span>
+			<span id="star5"  class="fa fa-star"></span>
+		</div>
+
+
+    <!-- Checks if the user has saved the place in the favorites -->
+    <% var alreadySaved = false; %>
+    <% if(currentUser){ %>
+      <% for(var i = 0; i < currentUser.savedPlaces.length; i++){ %>
+        <% if(String(currentUser.savedPlaces[i]) == String(foundPlace._id)) { %>
+          <% alreadySaved = true; %>
+          <% break; %>
+        <% } %>
+        <% } %>
+        <% if(alreadySaved == false) { %>
+          <form method="POST" action="/place/<%= foundPlace._id %>">
+            <button class="btn themePink1 text-white">Add to MyList!</button>
+          </form>
+        <% } else { %>
+          <form method="POST" action="/place/<%= foundPlace._id %>/delete">
+            <button class="btn themePink1 text-white">Delete from MyList :(</button>
+          </form>
+          <% var ratedAlready = false; %>
+          <% for(var i = 0; i < allRatings.length; i++){ %>
+            <% if(String(allRatings[i].byUser) == String(currentUser._id)) { %>
+              <% ratedAlready = true; %>
+              <% break; %>
+            <% } %>
+          <% } %>
+          <% if(ratedAlready == false){ %>
+            <div class="text-themePink1 text-24"style="margin-top:30px">Your Rating:
+              <div id="rating" class="text-themePink1 text-24" style="display:inline"></div>
+            </div>
+        		<div class="slidecontainer">
+        			<form id="rater" method="POST" action="/place/<%= foundPlace._id %>/rate">
+        				<input name="rate[rate]" oninput="displayRating(value)" type="range" min="0" max="5" class="slider" id="myRange" style="margin-bottom:20px">
+        				<input type="submit" class="tag-button themePink1 hover-themeRed1 text-white">
+        			</form>
+        		</div>
+          <% } %>
+        <% } %>
+    <% } %>
+
+	</div>
+
+
+
+	<div class="sub-restaurant themeGray1 shadow-themeGray5">
+  </br></br></br></br></br></br>
+		<div class="fluid row">
+			<div class="col-lg-7 display-window text-36 text-bold themePink2">
+				About This <%= foundPlace.type %>
+			</div>
+
+			<div class="col-lg-1">
+			</div>
+
+			<div class="col-lg-4 display-window text-36 text-bold themePink2">
+				Where is this <%= foundPlace.type %>?
+			</div>
+
+		</div>
+
+		<div class="fluid row">
+			<div class="col-lg-7 display-window themeGray3 text-24">
+				DESCRIPTION: </br></br>
+				<%= foundPlace.description %>
+			</div>
+
+			<div class="col-lg-1">
+			</div>
+
+			<div class="col-lg-4 display-window themeGray3">
+				<div id="googleMap" style="width:500px;height:500px"></div>
+
+			</div>
+
+
+		</div>
+
+
+
+
+
+
+
+
+
+
+	</div>
+
+
+	<!--Bottom Bar---------------------------------------------------------------------------------------->
+	<div class="bottom-bar-long themeRed5" style="padding:20px">
+	</div>
+
+
+
+
+</body>
+
+<script>
+
+  function displayRating(x){
+    var place = document.getElementById("rating");
+    place.innerHTML = x;
+  }
+
+
+	function Star(){
+		//get star rating from server here
+		var ratingS = "<%= rateAvg %>";
+    var rating = parseFloat(ratingS);
+
+		var star1 = document.getElementById("star1");
+		var star2 = document.getElementById("star2");
+		var star3 = document.getElementById("star3");
+		var star4 = document.getElementById("star4");
+		var star5 = document.getElementById("star5");
+
+		var list = [star1,star2,star3,star4,star5];
+
+		for(var i=0;i<rating;i++){
+			list[i].classList.add("checked");
+		}
+
+	}
+	window.onload = Star;
+
+
+	function myMap(){
+
+    //get gps information from the restaurant model
+    var location = "<%= foundPlace.gps %>".split(", ");
+
+    // parse string to number type
+    var lat = parseFloat(location[0]);
+    var lng = parseFloat(location[1]);
+
+
+    var buildingLatlng = new google.maps.LatLng(lat, lng);
+    var centerLatlng   = new google.maps.LatLng(lat, lng);
+
+		var mapProp = {
+			center:centerLatlng,
+			zoom:16
+		};
+
+		var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    var marker = new google.maps.Marker({
+                                                    position: buildingLatlng,
+                                                    map: map,
+                                                    title:"<%= foundPlace.name %>"
+                                                    });
+	}
+
+
+
+</script>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= googleKey %>&callback=myMap"></script>
+
+</html>

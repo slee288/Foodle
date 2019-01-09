@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <script src="/js/fadeout.js"></script>
+	<link rel="stylesheet" href="../stylesheets/foodleMainStyleSheet.css"/>
+
+
+
+	<style>
+		.checked {color:#ff6961}
+		.carousel-inner img {
+			width: 100%;
+			height:200px;
+			object-fit:cover;
+		}
+	</style>
+
+
+
+	<title></title>
+
+</head>
+<body class="black">
+
+	<div id="fixed">
+	</div>
+
+
+	<div class="top-bar-restaurant themePink1">
+    <% if(!currentUser){ %>
+  		<a href="/login" onclick="" class="top-bar-content hover-text-themeRed7 text-24 text-white text-unlined">
+  			Login
+  		</a>
+    <% } else { %>
+      <a href="/profile" class="top-bar-content hover-text-themeRed7 text-24 text-white text-unlined">
+        Signed In As <%= currentUser.firstname %>
+      </a>
+      <a href="/logout" onclick="" class="top-bar-content hover-text-themeRed7 text-24 text-white text-unlined">
+        Log Out
+      </a>
+    <% } %>
+
+    <a href="/" onclick="" class="top-bar-home hover-text-themeRed7 text-24 text-white text-unlined">
+			Foodle
+		</a>
+	</div>
+
+	</br>
+  <div class="container">
+    <div id="flasher">
+      <% if(success_msg && success_msg.length > 0){ %>
+        <div class="alert alert-success" rold="alert">
+            <%= success_msg %>
+        </div>
+      <% } else if(error_msg && error_msg.length > 0){ %>
+        <div class="alert alert-danger" rold="alert">
+            <%= error_msg %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+	<div class="white main-restaurant">
+		<div class="display-window border-themeRed5">
+			<img src="../images/defaultProfile.png" class="rounded-circle mx-auto d-block" width="10%" style="float:right">
+			<img src="../images/defaultProfile.png" class="rounded-circle mx-auto d-block" width="10%" style="float:left">
+			<p class="logo-superBig text-themePink1">Category</p>
+		</div>
+	</div>
+
+	<div class="themeRed3" style="margin-top:20%">
+		</br>
+		<p class="logo-superBig text-themePink1">
+			List of Locations
+		</p>
+		</br>
+	</div>
+
+
+  <% allPlaces.forEach(function(place) { %>
+  	<div class="profile-restaurant themeGray1">
+
+  		<div id="bannerCarousel" class="carousel slide" data-ride="carousel" style="width:300px;float:right;object-fit:cover">
+  			<ul class="carousel-indicators">
+  				<li data-target="#bannerCarousel" class="active"></li>
+  				<li data-target="#bannerCarousel" ></li>
+  				<li data-target="#bannerCarousel" ></li>
+  			</ul>
+
+  			<div class="carousel-inner">
+  				<div class="carousel-item active">
+  					<img src="<%= place.picurl1 %>" alt="photo1">
+  				</div>
+  				<div class="carousel-item">
+  					<img src="<%= place.picurl2 %>" alt="photo2">
+  				</div>
+  				<div class="carousel-item">
+  					<img src="<%= place.picurl3 %>" alt="photo3">
+  				</div>
+  			</div>
+
+
+  		</div>
+
+  		<div class="text-36 text-bold">
+  			<%= place.name %>
+  		</div>
+  		<div class="text-24">
+  			<%= place.location %>
+  		</div>
+  		</br>
+
+  		<a href="/place/<%= place._id %>" class="tag-button themePink1 hover-themeRed1 text-white">
+  			See More
+  		</a>
+
+
+  	</div>
+  <% }); %>
+
+  <!--Bottom Bar---------------------------------------------------------------------------------------->
+	<div class="bottom-bar-long themeRed5" style="padding:20px">
+
+		<div class="fluid">
+			<div class="row">
+
+				<div class="col-lg-1">
+
+				</div>
+
+				<div class="col-lg-4">
+
+					<div class="text-white display-window themeRed4" style="padding:20px;font-size:20px">
+						Don't see your favorite restaurant on website?</br>
+						Please send us a suggestion, and we will add your favorite restaurant ASAP!</br>
+					</div>
+					</br>
+
+					<form id="suggestionSender" method="POST" action="/category">
+						<div class="text-white"> Your Name </div><input type="text" name="name" style="width:50%"></br>
+						<div class="text-white"> Restaurant Name </div><input type="text" name="restaurant" style="width:50%"></br>
+						<div class="text-white"> Restaurant Address </div><input type="text" name="address" style="width:80%"></br>
+						<div class="text-white"> Extra information </div><textarea type="text" rows="5" name="extra" style="width:80%"></textarea></br>
+						<input type="submit" name="Submit" class="btn themeRed4 hover-themePink1">
+					</form>
+
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+</body>
+
+<script>
+
+	$(document).ready(function(){
+		$(window).scroll(function(){
+
+			/* Check the location of each desired element */
+			$('.profile-restaurant').each( function(i){
+				var trigger_point = $(this).offset().top + $(this).outerHeight()/2;
+				var top_of_window = $(window).scrollTop();
+				var bottom_of_window = $(window).scrollTop() + $(window).height();
+
+
+				if( bottom_of_window > trigger_point && trigger_point > top_of_window ){
+
+					$(this).animate({'opacity':'1'},1000);
+
+				}
+
+			});
+
+		});
+
+    });
+
+
+
+</script>
+
+
+
+
+
+
+
+</html>
